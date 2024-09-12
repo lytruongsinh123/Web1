@@ -1,0 +1,158 @@
+{% extends 'app/base.html' %} 
+{% load static %}
+        {% block detail %}
+        <style>
+            .product-detail {
+                width: 450px; /* Đặt chiều rộng cho div */
+                height: 300px; /* Đặt chiều cao cho div */
+                verflow-y: auto; /* Tạo thanh cuộn dọc khi nội dung vượt quá chiều cao */
+                overflow-x: hidden; /* Ẩn thanh cuộn ngang nếu không cần */
+                border: 1px solid #ccc; /* Đường viền để nhìn rõ khu vực div */
+                padding: 10px; /* Khoảng cách giữa nội dung và viền */
+            }
+            .section {
+                width: 100%;
+                margin-left: -15px;
+                padding: 2px 15px;
+            }
+            
+            .title-price, .title-attr {
+                margin-top: 30px;
+                margin-bottom: 0;
+                color: black;
+            }
+            
+            .title-attr {
+                margin-top: 0;
+            }
+            
+            .btn-minus, .btn-plus {
+                cursor: pointer;
+                font-size: 7px;
+                display: flex;
+                align-items: center;
+                padding: 5px 10px;
+                border: 1px solid gray;
+                border-radius: 2px;
+            }
+            
+            .btn-minus {
+                border-right: 0;
+            }
+            
+            .btn-plus {
+                border-left: 0;
+            }
+            
+            .section > div {
+                width: 100%;
+                display: inline-flex;
+            }
+            
+            .section > div > input {
+                margin: 0;
+                padding: 0 5px;
+                max-width: 18%;
+                text-align: center;
+            }
+            .attr, .attr2 {
+                cursor: pointer;
+                margin-right: 5px;
+                height: 20px;
+                font-size: 10px;
+                padding: 2px;
+                border: 1px solid gray;
+                border-radius: 2px;
+            }
+            
+            .attr.active, .attr2.active {
+                border: 1px solid orange;
+            }
+        </style>
+        <script>
+            $(document).ready(function(){
+                //-- Click on detail
+                $("ul.menu-items > li").on("click",function(){
+                    $("ul.menu-items > li").removeClass("active");
+                    $(this).addClass("active");
+                })
+    
+                $(".attr,.attr2").on("click",function(){
+                    var clase = $(this).attr("class");
+    
+                    $("." + clase).removeClass("active");
+                    $(this).addClass("active");
+                })
+    
+                //-- Click on QUANTITY
+                $(".btn-minus").on("click",function(){
+                    var now = $(".section > div > input").val();
+                    if ($.isNumeric(now)){
+                        if (parseInt(now) -1 > 0){ now--;}
+                        $(".section > div > input").val(now);
+                    }else{
+                        $(".section > div > input").val("1");
+                    }
+                })            
+                $(".btn-plus").on("click",function(){
+                    var now = $(".section > div > input").val();
+                    if ($.isNumeric(now)){
+                        $(".section > div > input").val(parseInt(now)+1);
+                    }else{
+                        $(".section > div > input").val("1");
+                    }
+                })                        
+            }) 
+        </script>
+        {% for pro in product %}
+        <div class="container mt-5 mb-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-10">
+                    <div class="card blur">
+                        <div class="row blur">
+                            <div class="col-md-6 " style="display:flex; align-items:center; justify-content:center">
+                                <div class="images p-3"> 
+                                    <div class="text-center p-4"> <img id="main-image" src="{{pro.ImageURL}}" width="250" /></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="product p-4">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center"><span><a href = "{% url 'home' %}" class="ml-1">Back</a></span> </div> <i class="fa fa-shopping-cart text-muted"></i>
+                                    </div>
+                                    <div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand">{{pro.name}}</span>
+                                        <h5 class="text-uppercase">{{pro.Hotline}}</h5>
+                                        <h5 class="text-uppercase">{{pro.seller}}</h5>
+                                        <div class="price d-flex flex-row align-items-center"> 
+                                            <span class="act-price">${{pro.price}}</span>
+                                            {% comment %} <div class="ml-2"> <small class="dis-price">$59</small> <span>40% OFF</span> </div> {% endcomment %}
+                                        </div>
+                                    </div>
+                                    <h6 class="title-attr" style=" text-decoration: underline; margin-bottom:7px"><small>DESCRIPTION</small></h6>
+                                    <div class="product-detail"><p class="about">{{pro.detail}}</p></div>
+                                    <br>
+
+                                    <div class="section" style="padding-bottom:20px;">
+                                        <h6 class="title-attr" style=" text-decoration: underline; margin-bottom:7px"><small>QUANLITY</small></h6>                    
+                                        <div>
+                                            <div class="btn-minus"><i class="bi bi-dash" style="font-size:20px"></i></div>
+                                            <input value="1"/>
+                                            <div class="btn-plus"><i class="bi bi-plus" style="font-size:20px"></i></div>
+                                        </div>
+                                    </div>   
+
+                                    <div class="cart mt-4 align-items-center"> 
+                                        <button data-product={{pro.id}} data-action="add" class="btn btn-danger text-uppercase mr-2 px-4 update-cart">Buy</button>
+                                        <button data-product={{pro.id}} data-action="add" class="btn btn-danger text-uppercase mr-2 px-4 update-cart">Add to cart</button> 
+                                        <i class="fa fa-heart text-muted"></i> <i class="fa fa-share-alt text-muted"></i> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="" async defer></script>
+        {% endfor %}
+        {% endblock detail %}

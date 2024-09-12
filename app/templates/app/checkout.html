@@ -1,0 +1,91 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content_checkout %}
+     <div class="row" style="width:100%">
+		<div class="col-lg-6">
+			    <div class="box-element" >
+					<div>
+						<form method="post">
+							{% csrf_token %}
+							{% if submitted %}
+								<!-- Hiển thị thông tin đã nhập -->
+								<h3>Thông tin đã nhập:</h3>
+								<div class="form-field form-control" style="width:100% !important; display:flex; align-items:center">
+									<div style="width:20%; border-right: 2px solid; display: flex; align-items: center; justify-content: center;"><label><i class="bi bi-geo-alt-fill" style="font-size:25px"></i></label></div>
+									<div style="width:80%; margin-left: 10px">{{ form.address.value }}</div>
+								</div>
+
+								<hr>
+								<div class="form-field form-control" style="width:100% !important; display:flex; align-items:center">
+									<div style="width:20%; border-right: 2px solid; display: flex; align-items: center; justify-content: center;"><label><i class="bi bi-person-check-fill" style="font-size:25px"></i></label></div>
+									<div style="width:80%; margin-left: 10px">{{ form.name.value }}</div>
+								</div>
+
+								<hr>
+								<div class="form-field form-control" style="width:100% !important; display:flex; align-items:center">
+									<div style="width:20%; border-right: 2px solid;display: flex; align-items: center; justify-content: center;"><label><i class="bi bi-telephone-inbound-fill" style="font-size:25px"></i></label></div>
+									<div style="width:80%; margin-left: 10px">{{ form.phone.value }}</div>
+								</div>
+
+								<hr>
+								<div class="form-field form-control" style="width:100% !important; display:flex; align-items:center">
+									<div style="width:20%; border-right: 2px solid; display: flex; align-items: center; justify-content: center;"><label><i class="bi bi-buildings-fill" style="font-size:25px"></i></label></div>
+									<div style="width:80%; margin-left: 10px">{{ form.city.value }}</div>
+								</div>
+
+								<hr>
+								
+							{% else %}
+								<!-- Hiển thị form nhập liệu -->
+								<p>Shipping Information:</p>
+								<div class="form-field form-control">
+									{{ form.address.label_tag }}
+									{{ form.address }}
+								</div>
+
+								<div class="form-field form-control">
+									{{ form.name.label_tag }}
+									{{ form.name }}
+								</div>
+								<hr>
+								<div class="form-field form-control">
+									{{ form.phone.label_tag }}
+									{{ form.phone }}
+								</div>
+								<div class="form-field form-control">
+									{{ form.city.label_tag }}
+									{{ form.city }}
+								</div>
+								<hr>
+								<button  class="btn btn-success btn-block submit" style="border-radius:5px">Continue</button>
+							{% endif %}
+						</form>
+					</div>
+			    </div>
+
+			<br>
+			<div class="box-element hidden" id="payment-info">
+				<small>Paypal Options</small>
+			</div>
+		</div>
+
+		<div class="col-lg-6">
+			<div class="box-element">
+				<a  class="btn btn-outline-dark" href="{% url 'cart' %}" style="border-radius:5px">&#x2190; Back to Cart</a>
+				<hr>
+				<h3>Order Summary</h3>
+				<hr>
+				{% for item in items %}
+				<div class="cart-row">
+					<div style="flex:2" ><img class="row-image" src="{{ item.product.ImageURL }}"></div>
+					<div style="flex:2"><p>{{ item.product.name }}</p></div>
+					<div style="flex:1"><p>${{ item.product.price }}</p></div>
+					<div style="flex:1"><p>{{item.quantity}}</p></div>
+				</div>
+				{% endfor %}
+				<h5>Items:   {{order.get_cart_items}}</h5>
+				<h5>Total:   ${{order.get_cart_total}}</h5>
+			</div>
+		</div>
+	</div>
+{% endblock content_checkout %}

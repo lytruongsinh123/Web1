@@ -1,0 +1,106 @@
+{% extends 'app/base.html' %} 
+{% load static %}
+<!--prettier-->
+        {% block individual %}
+        <style>
+            .image-individual-all {
+                position:relative;
+                width :300px;
+                height:300px;
+            }
+            .image-individual1 {
+                width:200px; 
+                height: 230px; 
+                margin-left:50px; 
+                border-radius:50px;
+                z-index:1;
+                position:absolute;
+            }
+            .image-individual2 {
+                width:200px; 
+                height: 230px; 
+                margin-left:80px; 
+                border-radius:50px;
+                border:2px solid black;
+                bottom: 35%;
+                z-index:0;
+                position:absolute;
+            }
+        </style>
+        <br>
+    <br>
+        <h2 style="margin-left:80px">Thông tin {{request.user}}</h2> 
+    <br>
+    <div class="row" style="width:100%;height: 300px">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-1"><i class="bi bi-person-circle" style="padding:10px 80px"></i></div>
+                <div class="col-md-3" style="padding-left:80px">Họ Tên</div>
+                <div class="col-md-6 box2" >{{ infor.name }}</div>
+            </div>
+            <br>
+
+            <div class="row" >
+                <div class="col-md-1"><i class="bi bi-geo-alt" style="padding:10px 80px"></i></div>
+                <div class="col-md-3" style="padding-left:80px" >Địa chỉ</div>
+                <div class="col-md-6 box2" >{{infor.address}}</div>
+            </div>
+            <br>
+
+            <div class="row" >
+                <div class="col-md-1"><i class="bi bi-building-add" style="padding:10px 80px"></i></div>
+                <div class="col-md-3" style="padding-left:80px">Thành Phố</div>
+                <div class="col-md-6 box2" >{{infor.city}}</div>
+            </div>
+            <br>
+            
+            <div class="row" >
+                <div class="col-md-1"><i class="bi bi-telephone-inbound" style="padding:10px 80px"></i></div>
+                <div class="col-md-3" style="padding-left:80px">Số điện thoại </div>
+                <div class="col-md-6 box2" >{{infor.phone}}</div>
+            </div>
+            <br>
+            
+            <div class="row" >
+                <div class="col-md-1"><i class="bi bi-person-circle"style="padding:10px 80px"></i></div>
+                <div class="col-md-3" style="padding-left:80px">Tài khoản</div>
+                <div class="col-md-6 box2" >{{infor.customer}}</div>
+            </div>
+        </div>
+        
+        <div class="col-md-6" style="height:100%">
+            <div class="image-individual-all">
+                <img class="image-individual1" src="{% if request.user.profile.image %}{{ request.user.profile.image.url }}{% else %}{% static 'app/images/person.png' %}{% endif %}"/>
+                <div class ="image-individual2"></div>
+                <div></div>
+            </div>
+        </div>
+
+    </div>
+    <hr>
+    <h2><center>Sản phẩm đã đăng</center></h2>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" style="margin-left:200px; margin-right:200px">
+        {% for product in products %}
+        <div class="col">
+          <div class="card shadow-sm box">
+            <img src="{{ product.ImageURL }}" class="bd-placeholder-img card-img-top" width="100%" height="225" alt="Thumbnail">
+            <div class="card-body">
+              <h6><strong>{{product.name}}</strong></h6>
+              <hr>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a class="btn btn-outline-success" href="{% url 'detail' %}?id={{product.id}}" style="border-radius:5px">View</a>
+                  <button data-product={{product.id}} data-action="add" class="btn btn-outline-secondary add-btn add-btn update-cart" style="margin-left:5px;border-radius:5px; margin-right:6px">Add to cart</button>
+                  <a class="btn btn-outline-success" href="{% url 'delete_product' product.id %}" style="border-radius:5px">Delete</a>
+                </div>
+                <h4 style="display: inline-block; float: right"><strong>${{product.price | floatformat:0}}</strong></h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <br>
+      {% endblock %}
+    
+    

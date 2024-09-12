@@ -1,0 +1,77 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block post %}
+
+<form method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+ <br><br><br><br>   
+    <main class="wrapper">
+
+      <section class="content-box blur">
+
+        <div style="width: 40%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+          <h1><strong><center>POST PRODUCT</center></strong></h1>
+          <div class="brush-mask">
+            <img class="image-post-product" src="https://hoanghamobile.com/tin-tuc/wp-content/uploads/2023/07/anh-dep-thien-nhien-2-1.jpg" alt="Post Product Image">
+          </div>
+          
+          <br>
+                
+          <center><div style="width: 100%; height: 30%; margin-top: 10px;">
+            {{ forms.image }}
+          </div></center>
+
+          <div style="width: 100%; display: flex; justify-content: center; margin-top: 20px;">
+            <button type="submit" name="submit_product" class="glowy-button"><span>Upload</span></button>
+          </div>
+
+        </div>
+      
+        <div class="divider"></div>
+      
+        <div style="width: 60%; display: flex; flex-direction: column;">
+          <div style="width: 100%; height: 20%; display: flex; flex-direction: row; margin-bottom: 10px; margin-left: 50px;">
+
+            <div style="width: 20%;">Category</div>
+              {{ forms.category }}
+            </div>
+      
+            <div style="width: 100%; height: 10%; display: flex; flex-direction: row; margin-bottom: 10px; margin-left: 50px;">
+              <div style="width: 20%;">Name</div>
+              {{ forms.name }}
+            </div>
+      
+            <div style="width: 100%; height: 10%; display: flex; flex-direction: row; margin-bottom: 10px; margin-left: 50px;">
+              <div style="width: 20%;">Price</div>
+              {{ forms.price }}
+            </div>
+      
+            <div style="width: 100%; height: auto; display: flex; flex-direction: row; margin-bottom: 10px; margin-left: 50px;">
+              <div style="width: 20%;">Digital</div>
+              {{ forms.digital }}
+            </div>
+      
+            <div style="width: 100%; height: 20%; display: flex; flex-direction: row; margin-bottom: 10px; margin-left: 50px;">
+              <div style="width: 20%;">Detail</div>
+              {{ forms.detail }}
+            </div>
+      
+            <div style="width: 100%; height: 10%; display: flex; flex-direction: row; margin-bottom: 10px; margin-left: 50px;">
+              <div style="width: 20%;">Seller</div>
+              {{ forms.seller }}
+            </div>
+      
+            <div style="width: 100%; height: 10%; display: flex; flex-direction: row; margin-bottom: 10px; margin-left: 50px;">
+              <div style="width: 20%;">Phone</div>
+              {{ forms.Hotline }}
+            </div>
+
+          </div>
+        </div>
+          
+      </section>
+    </main>
+</form>
+<br><br><br>
+{% endblock post %}

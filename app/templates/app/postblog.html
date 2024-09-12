@@ -1,0 +1,227 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+
+{% block postblog %}
+<style>
+  .tag-wrap1, .tag-wrap2, .tag-wrap3 {
+    position: absolute; /* Để các phần tử chồng lên nhau */
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    filter: drop-shadow(10px 6px 3px rgba(50, 50, 0, 0.5));
+  }
+  
+  .tag-wrap1 {
+    z-index: 3; /* Đặt lớp này dưới lớp tag-wrap2 */
+  }
+  
+  .tag-wrap2 {
+    z-index: 2; /* Đặt lớp này trên lớp tag-wrap1 */
+  }
+  .tag-wrap3 {
+    z-index: -2;
+  }
+  
+  .tag1, .tag2,.tag3 {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    color: white;
+    padding: 10px; 
+    background: grey; /* Màu nền của các tag */
+  }
+  
+  .tag1 {
+    clip-path: polygon(70% 0, 100% 0, 100% 100%, 30% 100%);
+    background-image: url("https://gcs.tripi.vn/public-tripi/tripi-feed/img/474076OEk/anh-nen-4k-anime_062606240.jpg");
+    background-size: cover;
+  }
+  
+  .tag2 {
+    clip-path: polygon(0 10%, 64.3% 10%, 40% 70%, 0 70%);
+    background-image: url("https://gcs.tripi.vn/public-tripi/tripi-feed/img/474076OEk/anh-nen-4k-anime_062606240.jpg");
+    background-size: cover;
+  }
+  .tag3 {
+    clip-path: polygon(11% 82%, 35.5% 82%, 29.9% 96%, 5% 96%);
+    background-image: url("https://gcs.tripi.vn/public-tripi/tripi-feed/img/474076OEk/anh-nen-4k-anime_062606240.jpg");
+    background-size: cover;
+  }
+
+
+  .custom-textarea2 {
+    width: 357px; /* Điều chỉnh độ rộng theo ý muốn */
+    backdrop-filter: blur(8px);
+    height: 90%;
+    
+  }
+  .custom-text2 {
+    width: 270px; /* Điều chỉnh độ rộng theo ý muốn */
+    backdrop-filter: blur(8px);
+    height: 100%;
+  }
+  .custom-file-input2 {
+    width:448px;
+    margin: 10px 0;
+    padding: 5px;
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  /* Thay đổi giao diện khi hover */
+  .custom-file-input2:hover {
+    background-color: #e2e6ea;
+  }
+
+  /* Tùy chỉnh chữ */
+  .custom-file-input2::file-selector-button {
+    color: white;
+    background-color: #495057;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+  }
+
+  /* Tùy chỉnh khi hover nút chọn tệp */
+  .custom-file-input2::file-selector-button:hover {
+    background-color: #0056b3;
+  }
+
+  .diagonal-line1 {
+    width: 20px;
+    height: 1000px;
+    bottom: 50%; /* Đặt đường thẳng ở cạnh dưới của phần tử chứa */
+    left: -5%; /* Đặt đường thẳng ở cạnh trái của phần tử chứa */
+    transform-origin: bottom left; /* Điểm gốc quay tại góc dưới trái của phần tử chứa */
+    background: linear-gradient(90deg, #ff7e5f, #feb47b);
+    border : 1px solid white;
+    transform: rotate(36deg);
+    position: absolute;
+    z-index:1
+  }
+
+  .diagonal-line2 {
+    width: 20px;
+    height: 1000px;
+    bottom: 10%; /* Đặt đường thẳng ở cạnh dưới của phần tử chứa */
+    left: -5%; /* Đặt đường thẳng ở cạnh trái của phần tử chứa */
+    transform-origin: bottom left; /* Điểm gốc quay tại góc dưới trái của phần tử chứa */
+    background: linear-gradient(90deg, #a0d6f3, #005f73);
+    border : 1px solid white;
+    transform: rotate(36deg);
+    position: absolute;
+    z-index:1
+  }
+
+  .diagonal-line3 {
+    width: 20px;
+    height: 1000px;
+    bottom: 22%; /* Đặt đường thẳng ở cạnh dưới của phần tử chứa */
+    left: 1%; /* Đặt đường thẳng ở cạnh trái của phần tử chứa */
+    transform-origin: bottom left; /* Điểm gốc quay tại góc dưới trái của phần tử chứa */
+    border : 3px solid white;
+    transform: rotate(90deg);
+    position: absolute;
+    z-index:0
+  }
+
+  .diagonal-line4 {
+    width: 20px;
+    height: 1000px;
+    bottom: 0; /* Đặt đường thẳng ở cạnh dưới của phần tử chứa */
+    left: 0; /* Đặt đường thẳng ở cạnh trái của phần tử chứa */
+    transform-origin: bottom left; /* Điểm gốc quay tại góc dưới trái của phần tử chứa */
+    border : 3px solid white;
+    transform: rotate(36deg);
+    position: absolute;
+    z-index:-1
+  }
+
+  .content-box {
+    backdrop-filter: blur(8px);
+  }
+
+  .custom-file-input3 {
+    width:505px;
+    margin: 10px 0;
+    padding: 5px;
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  /* Thay đổi giao diện khi hover */
+  .custom-file-input3:hover {
+    background-color: #e2e6ea;
+  }
+
+  /* Tùy chỉnh chữ */
+  .custom-file-input3::file-selector-button {
+    color: white;
+    background-color: #495057;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+  }
+
+  /* Tùy chỉnh khi hover nút chọn tệp */
+  .custom-file-input3::file-selector-button:hover {
+    background-color: #0056b3;
+  }
+  .box-title{
+    z-index:4;
+  }
+  
+  
+</style>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <br><br><br><br>   
+    <main class="wrapper">
+      <section class="content-box blur" style="display:flex; justify-content:center">
+        <div class="tag-wrap1">
+          <div class="tag1">
+            <div style="width:30%"> 
+            </div>
+            <div style="width:70%">
+              <h3>POSBLOG</h3>
+              <br>
+              <div style="width:70%; height:10%;margin-left:370px;display:flex;align-items:center"><div style="margin-right:8px;border-bottom: 4px solid #fff; border-top: 4px solid #fff;">Title</div>  {{formss.title}}</div>
+              <br>
+              <div style="width:100%; height:30%; margin-left:278px; display:flex;align-items:center;"><div style="margin-right:8px;border-bottom: 4px solid #fff; border-top: 4px solid #fff;">Body</div>   {{formss.body}}</div>
+              <br>
+              <div style=" height:10%;margin-left:179px;display:flex;align-items:center"><div style="margin-right:8px;border-bottom: 4px solid #fff; border-top: 4px solid #fff;">Image</div>  {{formss.image}}</div>
+              <br>
+              <div style="width:100%; height:10%;margin-left:124px;display:flex;align-items:center"><div style="margin-right:8px;border-bottom: 4px solid #fff; border-top: 4px solid #fff;">Video</div> {{formss.video}}</div>
+              <br>
+              <button type="submit" name="submit_product" class="glowy-button blur" style=" width:100%"><span>Upload</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="tag-wrap2">
+          <div class="tag2">  
+          </div>
+        </div>
+
+        <div class="tag-wrap3">
+          <div class="tag3">  
+          </div>
+        </div>
+
+        <div class="box-title"><h2 style="border-bottom: 3px solid #ccc;">POSTBLOG</h2></div>
+
+
+
+        <div class="diagonal-line1"></div>
+        <div class="diagonal-line2"></div>
+        <div class="diagonal-line3"></div>
+        <div class="diagonal-line4"></div>
+
+      </section>
+    </main>
+</form>
+{% endblock postblog %}
+

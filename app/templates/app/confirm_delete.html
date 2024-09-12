@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác nhận xóa sản phẩm</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #e0e0e0;
+        }
+        .container {
+            max-width: 500px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #f7f7f7;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #495057;
+        }
+        .btn-danger {
+            margin-right: 10px;
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .btn-secondary {
+            color: #ffffff;
+            background-color: #adb5bd;
+            border-color: #adb5bd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <h1>Bạn có chắc chắn muốn xóa sản phẩm <strong>"{{ product.name }}"</strong> không?</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Xóa</button>
+            <a href="{% url 'home' %}" class="btn btn-secondary">Hủy</a>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

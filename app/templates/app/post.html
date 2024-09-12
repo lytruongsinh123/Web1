@@ -1,0 +1,475 @@
+{% extends "app/base.html" %} 
+{% load static %} 
+{% block detail_block %}
+<style>
+  .custom-button {
+    background-color: green; /* Màu nền */
+    color: white; /* Màu chữ */
+    border: none; /* Không có viền */
+    padding: 10px 20px; /* Khoảng cách bên trong */
+    text-align: center; /* Căn giữa chữ */
+    text-decoration: none; /* Không gạch chân chữ */
+    display: inline-block; /* Hiển thị nút như một khối nội tuyến */
+    font-size: 16px; /* Kích thước chữ */
+    border-radius: 5px; /* Bo tròn các góc */
+    cursor: pointer; /* Hiển thị con trỏ chuột khi di chuột lên nút */
+    transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền khi hover */
+    width: 150px; /* Chiều rộng cố định */
+    height: 50px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .custom-button:hover {
+    background-color: #2980b9; /* Màu nền khi hover */
+  }
+</style>
+
+<!--Xử lý AJAX cho nút Like-->
+<script>
+  function likePost(postId) {
+      const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+      fetch(`/like/${postId}/`, {
+          method: 'POST',
+          headers: {
+              'X-CSRFToken': csrftoken,
+              'Content-Type': 'application/json'
+          },
+      })
+      .then(response => response.json())
+      .then(data => {
+          const likeButton = document.querySelector(`#like-button-${postId}`);
+          const likeIcon = document.querySelector(`#like-icon-${postId}`);
+          const likeCount = document.querySelector(`#like-count-${postId}`);
+
+          // Cập nhật icon dựa trên trạng thái like
+          if (data.liked) {
+              likeIcon.classList.remove('bi-hand-thumbs-up');
+              likeIcon.classList.add('bi-hand-thumbs-up-fill');
+          } else {
+              likeIcon.classList.remove('bi-hand-thumbs-up-fill');
+              likeIcon.classList.add('bi-hand-thumbs-up');
+          }
+
+          // Cập nhật số lượng like
+          likeCount.innerText = data.likes_count;
+      })
+      .catch(error => console.error('Error:', error));
+  }
+</script>
+<!--Xử lý AJAX cho reply-->
+<script>
+  
+</script>
+
+
+
+<div class="containerhung">
+  <div class="column small"></div>
+  <div class="column large">
+    <h3 class="main-content">
+      <p>{{post.title}}</p>
+      <br />
+      <img
+        src="{{post.poster.profile.image.url}}"
+        width="60"
+        height="60"
+        class="rounded-circle mr-3"
+      />
+      <p>{{post.poster}}</p>
+    </h3>
+
+    {% if post.image %}
+    <div>
+      <img
+        src="{{ post.image.url }}"
+        class="column-imge"
+        style="border-radius: 15px"
+      />
+      <h6>on {{post.date}}</h6>
+      {{post.body|safe|linebreaks}}
+      <span id="like-count-{{ post.id }}">{{ post.likes.count }}</span> likes
+      <hr />
+      <div class="likes">
+        <div style = "width:25%;display: flex; justify-content: center; align-items : center;"> 
+          <form id="like-form-{{ post.id }}">
+            {% csrf_token %}
+            <button type="button" class="custom-button" id="like-button-{{ post.id }}" onclick="likePost({{ post.id }})">
+              <i id="like-icon-{{ post.id }}" class="bi {% if liked %}bi-hand-thumbs-up-fill{% else %}bi-hand-thumbs-up{% endif %}" style="font-size: 30px"></i>
+            </button>
+          </form>
+        </div>
+
+
+        <div style = "width:25%;display: flex; justify-content: center; align-items : center;">        
+          <button class="custom-button">
+            <span class = "glyphicon glyphicon-thumbs-up" ><i class="bi bi-share"  style = "font-size: 30px"></i></span>
+          </button>
+        </div>
+
+        <div style = "width:25%; display: flex; justify-content: center; align-items : center;">        
+          <button class="custom-button">
+            <span class = "glyphicon glyphicon-thumbs-up" > <i class="bi bi-robot"  style = "font-size: 30px"></i></span>
+          </button>
+        </div>
+      </div>
+
+      <hr>
+
+
+
+      {% for comment in post.comments.all %}
+      <div class="d-flex flex-row p-3">
+        <div style="width: 60px">
+          <img
+            src="{% if comment.author.profile.image %}{{ comment.author.profile.image.url }}{% else %}{% static 'app/images/person.png' %}{% endif %}"
+            width="40"
+            height="40"
+            class="rounded-circle mr-3"
+          />
+        </div>
+        <div style="width: 1000px;background-color:white; padding-left:20px;padding-right:20px;border-radius:5px; border: 2px solid #adb5bd">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex flex-row align-items-center">
+              <span class="mr-2">{{comment.author}}</span>
+              {% comment %} <small class="c-badge">Top Comment</small> {% endcomment %}
+            </div>
+            <small>{{comment.date}}</small>
+          </div>
+          <p
+            class="text-justify comment-text mb-0"
+            style="
+              border: 2px solid #adb5bd;
+              border-radius: 5px;
+              padding: 10px;
+              background-color: #f0f0f0;
+            "
+          >
+            {{comment.body}}
+          </p>
+          
+          <div class="d-flex flex-row user-feed" style="margin-top:4px;align-items:center;">
+            <div class="wish" style="width:5%"><i class="fa fa-heartbeat mr-2" style="width:60%; font-size:20px"></i>14</div>
+            <div style="margin-left:100px; width:80%">
+              <a type="button" data-bs-toggle="collapse" data-bs-target="#replyBox{{ comment.id }}" aria-expanded="false" aria-controls="replyBox{{ comment.id }}" style="border-radius:5px">
+                <i class="bi bi-reply-fill" style="font-size:25px"></i>Reply
+              </a>
+              <div class="collapse" id="replyBox{{ comment.id }}">
+                <div class="card card-body my-2">
+                  <!--Reply-->
+                  {% for reply in comment.replies.all %}
+                  <div class="d-flex flex-row p-3">
+                    <div style="width: 60px">
+                      <img
+                        src="{% if reply.author.profile.image %}{{ reply.author.profile.image.url }}{% else %}{% static 'app/images/person.png' %}{% endif %}"
+                        width="40"
+                        height="40"
+                        class="rounded-circle mr-3"
+                      />
+                    </div>
+                    <div style="width: 600px">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex flex-row align-items-center">
+                          <span class="mr-2">{{reply.author}}</span>
+                          <small class="c-badge">Top Comment</small>
+                        </div>
+                        <small>{{comment.date}}</small>
+                      </div>
+                      <p
+                        class="text-justify comment-text mb-0"
+                        style="
+                          border: 2px solid #adb5bd;
+                          border-radius: 5px;
+                          padding: 10px;
+                          background-color: #f0f0f0;
+                        "
+                      >
+                        {{reply.content}}
+                      </p>
+                    </div>
+                  </div>
+                  {% endfor %}
+
+                  <!--Reply form-->
+                  <form id="reply-form" action="{% url 'add_reply' %}" method="POST"> 
+                    {% csrf_token %}
+                    <input type="hidden" name="comment_idd" value="{{ comment.id }}" />
+                    
+                    <div class="card" style="padding: 16px">
+                      <div class="row">
+                        <div class="image-container col-2">
+                          <img
+                            src="{% if request.user.profile.image %}{{ request.user.profile.image.url }}{% else %}{% static 'app/images/person.png' %}{% endif %}"
+                            width="70"
+                            height="70"
+                            class="rounded-circle mt-2"
+                          />
+                          <br />
+                          <p>{{ request.user }}</p>
+                        </div>
+                        <div class="col-10">
+                          <div class="comment-box ml-2">
+                            <h4>Add a comment</h4>
+                            <div class="comment-area">
+                              <textarea
+                                class="form-control"
+                                placeholder="What is your view?"
+                                rows="4"
+                                name="content"
+                              ></textarea>
+                            </div>
+                            <div class="comment-btns mt-2">
+                              <div class="row">
+                                <div class="col-6">
+                                  <div class="pull-left">
+            
+                                    <button
+                                      type="button"
+                                      id="cancel-button"
+                                      class="btn btn-success btn-sm"
+                                      style="border-radius: 5px"
+                                    >
+                                      Cancel
+                                    </button>
+            
+                                  </div>
+                                </div>
+                                <div class="col-6">
+            
+            
+                                  <div class="pull-left rtl-container">
+                                    <button
+                                      type="submit"
+                                      id="cancel-button"
+                                      class="btn btn-success btn-sm"
+                                      style="border-radius: 5px"
+                                    >
+                                      Comment
+                                    </button>
+                                  </div>
+            
+            
+                                </div>
+                              </div>
+                            </div>
+                            <div id="comment-messages"></div>
+                            <!-- Thêm phần để hiển thị thông báo lỗi -->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+
+                </div>
+                <br>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %} 
+      {% if user.username %}
+
+
+
+
+      <form id="comment-form" action="{% url 'add_comment' %}" method="POST"> <!--$("#comment-form").submit(function (event)-->
+        {% csrf_token %}
+        <input type="hidden" name="post_idd" value="{{ post.id }}" />
+        
+        <div class="card" style="padding: 16px">
+          <div class="row">
+            <div class="image-container col-2">
+              <img
+                src="{% if request.user.profile.image %}{{ request.user.profile.image.url }}{% else %}{% static 'app/images/person.png' %}{% endif %}"
+                width="70"
+                height="70"
+                class="rounded-circle mt-2"
+              />
+              <br />
+              <p>{{ request.user }}</p>
+            </div>
+            <div class="col-10">
+              <div class="comment-box ml-2">
+                <h4>Add a comment</h4>
+                <div class="comment-area">
+                  <textarea
+                    class="form-control"
+                    placeholder="What is your view?"
+                    rows="4"
+                    name="body"
+                  ></textarea>
+                </div>
+                <div class="comment-btns mt-2">
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="pull-left">
+
+                        <button
+                          type="button"
+                          id="cancel-button"
+                          class="btn btn-success btn-sm"
+                          style="border-radius: 5px"
+                        >
+                          Cancel
+                        </button>
+
+                      </div>
+                    </div>
+                    <div class="col-6">
+
+
+                      <div class="pull-left rtl-container">
+                        <button
+                          type="submit"
+                          id="cancel-button"
+                          class="btn btn-success btn-sm"
+                          style="border-radius: 5px"
+                        >
+                          Comment
+                        </button>
+                      </div>
+
+
+                    </div>
+                  </div>
+                </div>
+                <div id="comment-messages"></div>
+                <!-- Thêm phần để hiển thị thông báo lỗi -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </form> 
+
+
+
+
+
+      {% endif %}
+    </div>
+    {% elif post.video %}
+    <div>
+      <video class="column-imge" width="500px" height="300px" controls>
+        <source src="{{ post.video.url }}" type="video/mp4" />
+      </video>
+      <h6>on {{post.date}}</h6>
+      {{post.body|safe|linebreaks}} 
+      <!-- prettier-ignore -->
+      {% for comment in post.comments.all %}
+      <div class="d-flex flex-row p-3">
+        <img
+          src="{{comment.author.profile.image.url}}"
+          width="40"
+          height="40"
+          class="rounded-circle mr-3"
+        />
+        <div style="width: 1000px">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex flex-row align-items-center">
+              <span class="mr-2">{{comment.author}}</span>
+              <small class="c-badge">Top Comment</small>
+            </div>
+            <small>2h ago</small>
+          </div>
+          <p
+            class="text-justify comment-text mb-0"
+            style="
+              border: 2px solid white;
+              border-radius: 5px;
+              padding: 10px;
+              background-color: #f0f0f0;
+            "
+          >
+            {{comment.body}}
+          </p>
+          <div class="d-flex flex-row user-feed">
+            <span class="wish"><i class="fa fa-heartbeat mr-2"></i>14</span>
+            <span class="ml-3"><i class="fa fa-comments-o mr-2">
+              <!--class Reply(models.Model):
+                  parent_comment= models.ForeignKey(Comment, null=True, blank=True, on_delete=models.CASCADE, related_name='replies')-->
+              {% for reply in comment.replies.all %}
+              <div class="reply">
+                <p>{{ reply.author }}: {{ reply.content }}</p>
+              </div>
+              {% endfor %}
+            </i></span>
+          </div>
+        </div>
+      </div>
+      {% endfor %} 
+      
+      {% if user.username %}
+      <!--def add_comment(request):
+              if request.method == "POST":-->
+      <form id="comment-form" action="{% url 'add_comment' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="post_id" value="{{ post.id }}" />
+        <div class="card" style="padding: 16px">
+          <div class="row">
+            <div class="image-container col-2">
+              <img
+                src="{{ request.user.profile.image.url }}"
+                width="70"
+                height="70"
+                class="rounded-circle mt-2"
+              />
+              <br />
+              <p>{{ request.user }}</p>
+            </div>
+            <div class="col-10">
+              <div class="comment-box ml-2">
+                <h4>Addd a comment</h4>
+                <div class="comment-area">
+                  <textarea
+                    class="form-control"
+                    placeholder="What is your view?"
+                    rows="4"
+                    name="body"
+                  ></textarea>
+                </div>
+                <div class="comment-btns mt-2">
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="pull-left">
+                        <button
+                          type="button"
+                          id="cancel-button"
+                          class="btn btn-success btn-sm"
+                          style="border-radius: 5px"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="pull-left rtl-container">
+                        <input
+                          type="submit"
+                          class="btn btn-success send btn-sm"
+                          value="Comment"
+                          style="border-radius: 5px"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="comment-messages"></div>
+                <!-- Thêm phần để hiển thị thông báo lỗi -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+  <div class="column small"></div>
+</div>
+<br />
+<br />
+<br />
+{% endblock %}

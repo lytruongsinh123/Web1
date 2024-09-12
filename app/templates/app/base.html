@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% load static %}
+    <meta charset="utf-8" />
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!--CSS-->
+
+<link rel="stylesheet" href="{% static 'app/css/style.css' %}" />
+<link rel="stylesheet" href="{% static 'app/css/main.css' %}" />
+<link rel="stylesheet" href="{% static 'app/css/all.min.css' %}" />
+<link rel="stylesheet" href="{% static 'app/css/owl.carousel.min.css' %}" />
+
+<!-- External CSS (load after local) -->
+
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+  crossorigin="anonymous"
+/>
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+  rel="stylesheet"
+/>
+
+<!--JS (load after CSS)-->
+<script
+  src="https://code.jquery.com/jquery-3.7.1.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+  crossorigin="anonymous"
+  defer
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+  crossorigin="anonymous"
+  defer
+></script>
+
+    
+    <!-- jQuery AJAX handling script -->
+    <!--khắc phục tình trạng cứ bình luận là trang web phải load lại-->
+    <script>
+      $(document).ready(function () {
+        $("#comment-form").submit(function (event) {
+          event.preventDefault(); // Ngăn chặn gửi form mặc định
+          $.ajax({
+            url: $(this).attr("action"), // URL của view xử lý AJAX
+            type: "POST",
+            data: $(this).serialize(), // Dữ liệu gửi đi
+            success: function (response) {
+              // Thay đổi giao diện khi bình luận thành công
+              $("#comment-form")[0].reset(); // Xóa dữ liệu form
+              // Cập nhật danh sách bình luận nếu cần
+              location.reload(); // Tùy chọn: reload trang để cập nhật danh sách bình luận
+            },
+            error: function (xhr) {
+              let errors = xhr.responseJSON.errors;
+              let errorMessages = "<ul>";
+              $.each(errors, function (field, messages) {
+                $.each(messages, function (index, message) {
+                  errorMessages += "<li>" + message + "</li>";
+                });
+              });
+              errorMessages += "</ul>";
+              $("#comment-messages").html(
+                "<p>There were errors:</p>" + errorMessages
+              );
+            },
+          });
+        });
+
+        $("#cancel-button").click(function () {
+          $("#comment-form")[0].reset(); // Xóa dữ liệu form khi nhấn Cancel
+        });
+      });
+    </script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+      integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="{% static 'app/js/cart.js' %}"></script>
+    <script src="{% static 'app/js/all.min.js' %}"></script>
+    <script src="{% static 'app/js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'app/js/myscript.js' %}"></script>
+    
+
+    <script type="text/javascript">
+      var user = "{{request.user}}";
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+          const cookies = document.cookie.split(";");
+          for (let i = 0; cookies.length > i; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === name + "=") {
+              cookieValue = decodeURIComponent(
+                cookie.substring(name.length + 1)
+              );
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+      const csrftoken = getCookie("csrftoken");
+    </script>
+
+    <title>{% block title%}{% endblock title%}</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      .style-image {
+        border-radius: 20px;
+        width: 50px;
+        height: 50px;
+      }
+      .text-color {
+        color: #000000;
+      }
+      .truncate-multiline {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3; /* Hiển thị tối đa 3 dòng */
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .main-content {
+        text-align: center; /* Căn giữa văn bản */
+      }
+      .column {
+        width: 33.33%; /* Chiều rộng cố định bằng nhau cho mỗi cột */
+        padding: 10px;
+        box-sizing: border-box;
+        word-wrap: break-word; /* Đảm bảo từ dài sẽ tự động xuống dòng */
+      }
+      .column:nth-child(odd) {
+        background-color: #f0f0f0;
+      }
+      .column:nth-child(even) {
+        background-color: #d0d0d0;
+      }
+      .column-imge {
+        width: 100%;
+        text-align: center;
+        height: auto; /* Đảm bảo chiều cao phù hợp với chiều dài của cột */
+      }
+      .containerhung {
+        width: 100%;
+        display: flex;
+      }
+      .column.small {
+        width: 20%; /* Chiều rộng của các cột bên ngoài */
+      }
+      .column.large {
+        width: 60%; /* Chiều rộng của cột ở giữa */
+      }
+      .comment-text {
+        max-width: 100%; /* Đảm bảo đoạn văn bản không vượt quá chiều rộng của cột */
+        word-wrap: break-word; /* Đảm bảo từ dài xuống dòng */
+        overflow-wrap: break-word; /* Đảm bảo từ dài xuống dòng */
+      }
+      .image-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%; /* Đảm bảo chiều cao của container phù hợp với nội dung */
+      }
+      .rtl-container {
+        direction: rtl; /* Đảo ngược hướng nội dung từ phải sang trái */
+        text-align: right; /* Căn chỉnh văn bản sang phải */
+      }
+      .custom-link:nth-child(1) {
+        filter: hue-rotate(270deg);
+      }
+
+      .custom-link:nth-child(2) {
+        filter: hue-rotate(110deg);
+      }
+
+      .custom-link span {
+        position: absolute;
+        display: block;
+      }
+
+      .custom-link span:nth-child(1) {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #03e9f4);
+        animation: animate1 1s linear infinite;
+      }
+
+      @keyframes animate1 {
+        0% {
+          left: -100%;
+        }
+        50%,
+        100% {
+          left: 100%;
+        }
+      }
+
+      .custom-link span:nth-child(2) {
+        top: -100%;
+        right: 0;
+        width: 2px;
+        height: 100%;
+        background: linear-gradient(180deg, transparent, #03e9f4);
+        animation: animate2 1s linear infinite;
+        animation-delay: 0.25s;
+      }
+
+      @keyframes animate2 {
+        0% {
+          top: -100%;
+        }
+        50%,
+        100% {
+          top: 100%;
+        }
+      }
+
+      .custom-link span:nth-child(3) {
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(270deg, transparent, #03e9f4);
+        animation: animate3 1s linear infinite;
+        animation-delay: 0.5s;
+      }
+
+      @keyframes animate3 {
+        0% {
+          right: -100%;
+        }
+        50%,
+        100% {
+          right: 100%;
+        }
+      }
+
+      .custom-link span:nth-child(4) {
+        bottom: -100%;
+        left: 0;
+        width: 2px;
+        height: 100%;
+        background: linear-gradient(360deg, transparent, #03e9f4);
+        animation: animate4 1s linear infinite;
+        animation-delay: 0.75s;
+      }
+
+      @keyframes animate4 {
+        0% {
+          bottom: -100%;
+        }
+        50%,
+        100% {
+          bottom: 100%;
+        }
+      }
+
+      .custom-link {
+        position: relative;
+        display: inline-block;
+        padding: 10px 20px;
+        color: #03e9f4;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        text-decoration: none;
+        font-size: 18px;
+        overflow: hidden;
+        transition: 0.2s;
+      }
+
+      .custom-link:hover {
+        background: #03e9f4;
+        color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4,
+          0 0 200px #03e9f4;
+      }
+
+      input[type="radio"] {
+        display: none;
+      }
+      .tabs {
+        display: flex;
+        position: relative;
+        width: auto;
+        height: 50px;
+        margin-left: 20px;
+        background-color: #e4e4e4;
+        border-radius: 25px;
+      }
+      .tab {
+        width: auto;
+        height: 50px;
+        cursor: pointer;
+        z-index: 2;
+        position: relative;
+        font-weight: bold;
+        color: #333;
+        display: flex; /* Sử dụng flexbox */
+        justify-content: center; /* Căn giữa theo chiều ngang */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        text-align: center;
+      }
+      .tabs .slider {
+        width: auto;
+        height: 50px;
+        position: absolute;
+        background-color: #4973f3;
+        z-index: 0;
+        transition: 0.3s ease;
+        border-radius: 25px;
+      }
+      input[type="radio"]:checked + label {
+        color: #f1f1f1;
+      }
+      input[id="html"]:checked ~ .slider {
+        transform: translateX(0);
+      }
+      input[id="css"]:checked ~ .slider {
+        transform: translateX(100%);
+      }
+      .content {
+        display: none;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        margin-top: 10px;
+        text-align: center;
+      }
+      input[id="html"]:checked ~ .content-html {
+        display: block;
+      }
+      input[id="css"]:checked ~ .content-css {
+        display: block;
+      }
+      .profile-pic {
+        display: inline-block;
+        vertical-align: middle;
+        width: 50px;
+        height: 50px;
+        overflow: hidden;
+        border-radius: 50%;
+      }
+      .profile-pic img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+      }
+      .navbar.bg-body-tertiary {
+        background-color: #343a40 !important;
+        color: white !important;
+      }
+      body {
+        background: linear-gradient(50deg, white, gray, black);
+      }
+      .gradient-text {
+        background: linear-gradient(90deg, black.gray, white);
+      }
+      .container-product {
+        display: grid;
+        grid-template-columns: repeat(
+          4,
+          1fr
+        ); /* 4 cột với chiều rộng bằng nhau */
+        grid-gap: 20px; /* Khoảng cách giữa các cột */
+      }
+      .thumbnail1 {
+        width: 100%; /* Đảm bảo hình ảnh phù hợp với chiều rộng của cột */
+        height: auto; /* Đảm bảo tỷ lệ khung hình không bị thay đổi */
+      }
+      .box-element1 {
+        text-align: center; /* Căn giữa nội dung bên trong box */
+      }
+      .item {
+        background-color: lightgray; /* Màu nền để phân biệt các ô */
+        border: 1px solid #ccc; /* Đường viền xung quanh các ô */
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Căn giữa nội dung trong các ô */
+        height: 100px; /* Chiều cao cố định cho mỗi ô */
+      }
+      .custom-footer {
+        background-color: #343a40; /* Màu nền tối */
+        color: #f8f9fa; /* Màu chữ sáng */
+      }
+      .box {
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8) !important; /* Bóng với offset, blur, và màu sắc */
+      }
+      .wrapper {
+        display: flex;
+        width: 100%;
+        height: 700px;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .content-box {
+        position: relative;
+        width: 1000px;
+        display: flex;
+        height: 600px;
+        padding: 10px;
+        border: 1px solid white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .image-post-product {
+        width: 100%;
+        height: auto;
+        border-radius: 5px;
+        object-fit: cover;
+      }
+      .custom-textarea {
+        width: 350px; /* Điều chỉnh độ rộng theo ý muốn */
+        height: 90%;
+      }
+      .custom-text {
+        width: 350px; /* Điều chỉnh độ rộng theo ý muốn */
+        height: 100%;
+      }
+      .custom-textarea,
+      .custom-text {
+        border: 2px solid #ccc; /* Đường viền màu xám */
+        border-radius: 5px; /* Bo tròn góc */
+        /* Đảm bảo chiếm toàn bộ chiều rộng của container */
+      }
+
+      /* Brush Stroke Vector Shape for image*/
+      .brush-mask {
+        width: 300px; /* Adjust based on your image size */
+        height: 900px; /* Adjust based on your image size */
+        background: url("brush-stroke.png") center/cover no-repeat;
+        position: relative;
+      }
+
+      .brush-mask img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 250px;
+        -webkit-mask-image: url("{% static 'app\images\brush_stroke.png' %}");
+        -webkit-mask-size: cover;
+        mask-image: url("{% static 'app\images\brush_stroke.png' %}");
+        mask-size: cover;
+      }
+      .divider {
+        width: 2px; /* Độ rộng của đường gạch */
+        background-color: gray; /* Màu của đường gạch */
+        height: 100%; /* Độ cao của đường gạch */
+      }
+      .blur {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.37);
+
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: white;
+      }
+      .blur-detail {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        -webkit-backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.18);
+        color: white;
+      }
+
+      .file-preview img {
+        /* Style the preview image */
+        border: 1px solid #ddd;
+        padding: 5px;
+        border-radius: 4px;
+      }
+      .form-control-file {
+        width: 100%;
+        /* Other styles to adjust the appearance */
+      }
+
+      *:after,
+      *:before {
+        box-sizing: border-box;
+      }
+
+      :root {
+        --x: 0;
+        --y: 0;
+        --xp: 0;
+        --yp: 0;
+        --hue: calc(0 + (var(--xp) * 500));
+        --bg: hsl(0, 0%, 50%);
+        --size: 100px;
+        --glow: radial-gradient(
+            50% 50% at center,
+            hsl(var(--hue) 80% 85%),
+            hsl(var(--hue) 80% 70%),
+            transparent
+          )
+          calc((var(--x) * 1px) - (var(--size) * 0.5))
+          calc((var(--y) * 1px) - (var(--size) * 0.5)) / var(--size) var(--size)
+          no-repeat fixed;
+      }
+
+      .glowy-button {
+        border-radius: 1rem;
+        text-transform: uppercase;
+        font-weight: bold;
+        letter-spacing: 0.1ch;
+        background: var(--bg);
+        border: 4px solid transparent;
+        box-shadow: 0 1px hsl(0 0% 100% / 0.15) inset;
+        cursor: pointer;
+        background: linear-gradient(var(--bg), var(--bg)) padding-box,
+          var(--glow), linear-gradient(black, black) border-box;
+        transition: background-size 0.24s;
+        touch-action: none;
+        position: relative;
+        padding: 1rem 2rem;
+      }
+
+      .glowy-button::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        box-shadow: 0 1px hsl(0 0% 100% / 0.15) inset;
+        background: var(--bg);
+        z-index: 2;
+        border-radius: 1rem;
+      }
+
+      .glowy-button span {
+        background: var(--glow), black;
+        background-clip: text;
+        color: transparent;
+        height: 100%;
+        width: 100%;
+        z-index: 2;
+        position: relative;
+        inset: 0;
+      }
+
+      :root:has(.glowy-button:active) {
+        --size: 300px;
+      }
+
+      .glowy-button::after {
+        content: "";
+        position: absolute;
+        inset: -4px;
+        filter: blur(20px);
+        border: 4px solid transparent;
+        background: var(--glow);
+        border-radius: 1rem;
+      }
+      /* Tùy chỉnh ô chọn tệp */
+      .custom-file-input {
+        margin: 10px 0;
+        padding: 5px;
+        background-color: #adb5bd;
+        cursor: pointer;
+      }
+
+      /* Thay đổi giao diện khi hover */
+      .custom-file-input:hover {
+        background-color: #e2e6ea;
+      }
+
+      /* Tùy chỉnh chữ */
+      .custom-file-input::file-selector-button {
+        color: white;
+        background-color: #495057;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+      }
+
+      /* Tùy chỉnh khi hover nút chọn tệp */
+      .custom-file-input::file-selector-button:hover {
+        background-color: #0056b3;
+      }
+
+      .row-image {
+        border-radius: 10px; /* Điều chỉnh giá trị để thay đổi độ bo tròn */
+      }
+      .cart-row {
+        align-items: center;
+      }
+      .likes {
+        border-radius : 5px;
+        display : flex;
+        justify-content : center;
+        align-items : center;
+      }
+      /*Back ground dynamic*/
+    </style>
+  </head>
+
+  <body>
+    <script>
+      const syncPointer = ({ x: pointerX, y: pointerY }) => {
+        const x = pointerX.toFixed(2);
+        const y = pointerY.toFixed(2);
+        const xp = (pointerX / window.innerWidth).toFixed(2);
+        const yp = (pointerY / window.innerHeight).toFixed(2);
+        document.documentElement.style.setProperty("--x", x);
+        document.documentElement.style.setProperty("--xp", xp);
+        document.documentElement.style.setProperty("--y", y);
+        document.documentElement.style.setProperty("--yp", yp);
+      };
+      document.body.addEventListener("pointermove", syncPointer);
+    </script>
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <img
+          src="https://phuongnamvina.com/img_data/images/lam-logo-ban-hang-online-dep.jpg"
+          class="style-image"
+          style="width: 100px; height: auto"
+        />
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <div class="tabs">
+              <input type="radio" id="html" name="tab" checked />
+              <label for="html" class="tab">
+                <a
+                  href="{% url 'home' %}"
+                  class="tab-link custom-link"
+                  style="color: black; font-size: 18px"
+                  >HOME</a
+                >
+              </label>
+
+              <input type="radio" id="css" name="tab" checked />
+              <label for="css" class="tab">
+                <a
+                  href="{% url 'seller' %}"
+                  class="tab-link custom-link"
+                  style="color: black; font-size: 18px"
+                  >CONTACT</a
+                >
+              </label>
+
+              <input type="radio" id="dropdown-tab" name="tab" />
+              <label for="dropdown-tab" class="tab">
+                <a
+                  class="nav-link dropdown-toggle tab-link custom-link"
+                  href="#"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  style="font-size: 18px; color: black"
+                  >PRODUCT</a
+                >
+                <ul class="dropdown-menu">
+                  {% for i in categories %}
+                  <li>
+                    <a
+                      class="dropdown-item custom-link"
+                      href="{% url 'category' %}?category={{i.slug}}"
+                      >{{i.name}}</a
+                    >
+                  </li>
+                  {% endfor %}
+                </ul>
+              </label>
+
+              <input type="radio" id="html" name="tab" checked />
+              <label for="html" class="tab">
+                <a
+                  href="{% url 'postproduct' %}"
+                  class="tab-link custom-link"
+                  style="color: black; font-size: 18px"
+                  >PRODUCT POST</a
+                >
+              </label>
+
+              <span class="slider"></span>
+            </div>
+          </ul>
+
+          <div class="slider"></div>
+          <form
+            class="d-flex"
+            role="search"
+            method="POST"
+            action="{% url 'search' %}"
+            style="margin-left: 20px"
+          >
+            {% csrf_token %}
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+              name="searched"
+            />
+            <button
+              class="btn btn-outline-success"
+              type="submit"
+              style="border-radius: 5px"
+            >
+              Search
+            </button>
+          </form>
+
+          {% if user.is_authenticated %}
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown" style="visibility:{{user_login}}">
+              <a
+                a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style="font-size: 18px; color: white"
+              >
+                {{request.user}}
+                <div class="profile-pic" style="margin-left: 10px">
+                  <img
+                    src="{% if request.user.profile.image %}{{ request.user.profile.image.url }}{% else %}{% static 'app/images/person.png' %}{% endif %}"
+                    alt="Profile Picture"
+                  />
+                </div>
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item custom-link"href="{% url 'individual'  %}">INFORMATION</a>
+                </li>
+
+                <li>
+                  <a class="dropdown-item custom-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+
+                <li>
+                  <a class="dropdown-item custom-link" href="#">BUYED PRODUCT</a>
+                </li>
+
+                <li>
+                  <a class="dropdown-item custom-link" href="#">Hello {{request.user}}</a>
+                </li>
+                
+
+                <li>
+                  <a class="dropdown-item custom-link" href="{% url 'blog' %}">Blog</a>
+                </li>
+
+                <li>
+                  <a class="dropdown-item custom-link" href="{% url 'postblog' %}">Post Blog</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="form-inline my-2 my-lg-0">
+              <a href="{% url 'cart' %}">
+                <div style="position: relative; display: inline-block">
+                  <i
+                    class="bi bi-cart-check-fill"
+                    style="font-size: 40px; color: white; margin-left: 20px"
+                  ></i>
+                  <p
+                    id="cart-total"
+                    style="
+                      position: absolute;
+                      top: -5px;
+                      right: -10px;
+                      background-color: red;
+                      color: white;
+                      border-radius: 50%;
+                      padding: 2px 6px;
+                      font-size: 16px;
+                    "
+                  >
+                    {{ cartItems }}
+                  </p>
+                </div>
+              </a>
+            </li>
+          </ul>
+          {% else %}
+
+          <ul
+            class="navbar-nav me-auto mb-2 mb-lg-0"
+            style="margin-left: 200px"
+          >
+            <li
+              class="nav-item active"
+              style="visibility:{{user_not_login}}; margin-right:20px"
+            >
+              <a
+                class="nav-link custom-link"
+                href="{% url 'login' %}"
+                style="color: white; border: 2px solid; border-radius: 7px"
+              >
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Đăng nhập
+              </a>
+            </li>
+
+            <li class="nav-item active" style="visibility:{{user_not_login}}">
+              <a
+                class="nav-link custom-link"
+                href="{% url 'register' %}"
+                style="color: white; border: 2px solid; border-radius: 7px"
+              >
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Đăng ký
+              </a>
+            </li>
+          </ul>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+    <!--end menu-->
+
+    <script src="" async defer></script>
+    <!-- prettier-ignore -->
+    {% block baner-slider %}{% endblock baner-slider %} 
+
+    {% block main-content %}{% endblock main-content %}
+
+    {% block cart_content %}{% endblock cart_content %}
+
+    {% block content_checkout %}{% endblock content_checkout %}
+
+    {% block register_form %}{% endblock register_form %}
+    
+    {% block search %}{% endblock search %}
+
+    {% block detail %}{% endblock detail %}
+
+    {% block infor %}{% endblock infor %}
+
+    {% block contact %}{% endblock contact %}
+
+    {% block blog %}{% endblock blog %}
+
+    {% block content_blog %}{% endblock content_blog %}
+
+    {% block post %}{% endblock post %}
+
+    {% block postblog %}{% endblock postblog %}
+
+    {% block detail_block %}{% endblock detail_block %}
+
+    {% block test %}{% endblock test %}
+
+    {% block individual %}{% endblock individual %}
+
+    <br /><br /><br /><br />
+    <!--footer-->
+
+    <footer
+      class="container--fluid custom-footer text-center fixed-bottom p-2 mt-5"
+    >
+      &copy; 2024 Your company. All rights reserved.
+      <br />
+      <a
+        href="https://www.facebook.com/profile.php?id=100038168222977"
+        class="custom-link"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <i class="bi bi-facebook" style="font-size: 30px"></i>
+      </a>
+      <a href="#" class="custom-link">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <i class="bi bi-instagram" style="font-size: 30px"></i>
+      </a>
+      <a href="#" class="custom-link">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <i class="bi bi-google" style="font-size: 30px"></i>
+      </a>
+    </footer>
+    <script src="{% static 'app\js\cart.js' %}"></script>
+    <!--end footer-->
+  </body>
+</html>

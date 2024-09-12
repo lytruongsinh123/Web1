@@ -1,0 +1,47 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% block blog %}
+{% for post in Posts %}
+<br>
+
+<div class="row g-1 bg-light position-relative box" style="border-radius: 20px;">
+  <div class="col-md-6 mb-md-0 p-md-4">
+       {% if post.image %}
+       <img src="{{ post.image.url }}" width="500px" height="300px" style="border-radius: 20px;" />
+
+       {% elif post.video %}
+       <video width="500px" height="300px" style="border-radius: 20px;" controls>
+           <source src="{{ post.video.url }}" type="video/mp4">
+           Your browser does not support the video tag.
+       </video>
+       {% endif %}
+  </div>
+
+  <!-- Thêm đường gạch chia giữa -->
+  
+  <div class="col-md-5 p-4 ps-md-0">
+      <h4>{{ post.title }}</h4>
+      <h6>{{ post.date|date:"d-m-Y" }}</h6>
+      <div class="truncate-multiline">{{ post.body }}</div>
+      <a href="/app/{{ post.id }}" class="stretched-link custom-link">Go somewhere</a>
+  </div>
+</div>
+
+<br>
+{% endfor %}
+<br/>
+{% if page_obj.has_next %}
+    <a href="{{request.path}}?page={{page_obj.next_page_number}}" class="custom-link" style="display:flex; justify-content:center; align-items:center;">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        Tiếp theo
+    </a>
+
+{% endif %}
+<br>
+<br>
+<br>
+<br>
+{% endblock blog %}
