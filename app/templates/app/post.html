@@ -2,6 +2,7 @@
 {% load static %} 
 {% block detail_block %}
 <style>
+  
   .custom-button {
     background-color: green; /* Màu nền */
     color: white; /* Màu chữ */
@@ -15,57 +16,91 @@
     cursor: pointer; /* Hiển thị con trỏ chuột khi di chuột lên nút */
     transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền khi hover */
     width: 150px; /* Chiều rộng cố định */
-    height: 50px; 
+    height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  
+
   .custom-button:hover {
     background-color: #2980b9; /* Màu nền khi hover */
   }
-</style>
 
+</style>
 <!--Xử lý AJAX cho nút Like-->
 <script>
   function likePost(postId) {
-      const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const csrftoken = document.querySelector(
+      "[name=csrfmiddlewaretoken]"
+    ).value;
 
-      fetch(`/like/${postId}/`, {
-          method: 'POST',
-          headers: {
-              'X-CSRFToken': csrftoken,
-              'Content-Type': 'application/json'
-          },
+    fetch(`/like/${postId}/`, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": csrftoken,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const likeButton = document.querySelector(`#like-button-${postId}`);
+        const likeIcon = document.querySelector(`#like-icon-${postId}`);
+        const likeCount = document.querySelector(`#like-count-${postId}`);
+
+        // Cập nhật icon dựa trên trạng thái like
+        if (data.liked) {
+          likeIcon.classList.remove("bi-hand-thumbs-up");
+          likeIcon.classList.add("bi-hand-thumbs-up-fill");
+        } else {
+          likeIcon.classList.remove("bi-hand-thumbs-up-fill");
+          likeIcon.classList.add("bi-hand-thumbs-up");
+        }
+
+        // Cập nhật số lượng like
+        likeCount.innerText = data.likes_count;
       })
-      .then(response => response.json())
-      .then(data => {
-          const likeButton = document.querySelector(`#like-button-${postId}`);
-          const likeIcon = document.querySelector(`#like-icon-${postId}`);
-          const likeCount = document.querySelector(`#like-count-${postId}`);
-
-          // Cập nhật icon dựa trên trạng thái like
-          if (data.liked) {
-              likeIcon.classList.remove('bi-hand-thumbs-up');
-              likeIcon.classList.add('bi-hand-thumbs-up-fill');
-          } else {
-              likeIcon.classList.remove('bi-hand-thumbs-up-fill');
-              likeIcon.classList.add('bi-hand-thumbs-up');
-          }
-
-          // Cập nhật số lượng like
-          likeCount.innerText = data.likes_count;
-      })
-      .catch(error => console.error('Error:', error));
+      .catch((error) => console.error("Error:", error));
   }
 </script>
+
 <!--Xử lý AJAX cho reply-->
 <script>
-  
-</script>
-
-
-
+    document.getElementById('reply-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Ngăn chặn việc gửi form theo cách thông thường
+    
+        var formData = new FormData(this); // Lấy dữ liệu từ form
+    
+        // Sử dụng fetch API để gửi yêu cầu AJAX
+        fetch('{% url "add_reply" %}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest', // Đặt tiêu đề để xác định đây là AJAX request
+            },
+        })
+        .then(response => response.json()) // Chuyển đổi phản hồi từ JSON
+        .then(data => {
+            if (data.message) {
+                // Nếu thành công, cập nhật giao diện
+                alert(data.message); // Hoặc có thể hiện thông báo khác
+    
+                // Thêm nội dung reply mới vào danh sách reply
+                var newReply = document.createElement('div');
+                newReply.textContent = formData.get('content'); // Hiển thị nội dung reply
+                document.getElementById('repliesContainer').appendChild(newReply);
+    
+                // Reset lại form sau khi gửi thành công
+                document.getElementById('replyForm').reset();
+            } else if (data.errors) {
+                // Nếu có lỗi, hiển thị lỗi
+                alert('Có lỗi xảy ra: ' + JSON.stringify(data.errors));
+            }
+        })
+        .catch(error => {
+            console.error('Lỗi khi gửi yêu cầu:', error);
+        });
+    });
+  </script>   
 <div class="containerhung">
   <div class="column small"></div>
   <div class="column large">
@@ -93,32 +128,63 @@
       <span id="like-count-{{ post.id }}">{{ post.likes.count }}</span> likes
       <hr />
       <div class="likes">
-        <div style = "width:25%;display: flex; justify-content: center; align-items : center;"> 
+        <div
+          style="
+            width: 25%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          "
+        >
           <form id="like-form-{{ post.id }}">
             {% csrf_token %}
-            <button type="button" class="custom-button" id="like-button-{{ post.id }}" onclick="likePost({{ post.id }})">
-              <i id="like-icon-{{ post.id }}" class="bi {% if liked %}bi-hand-thumbs-up-fill{% else %}bi-hand-thumbs-up{% endif %}" style="font-size: 30px"></i>
+            <button
+              type="button"
+              class="custom-button"
+              id="like-button-{{ post.id }}"
+              onclick="likePost({{ post.id }})"
+            >
+              <i
+                id="like-icon-{{ post.id }}"
+                class="bi {% if liked %}bi-hand-thumbs-up-fill{% else %}bi-hand-thumbs-up{% endif %}"
+                style="font-size: 30px"
+              ></i>
             </button>
           </form>
         </div>
 
-
-        <div style = "width:25%;display: flex; justify-content: center; align-items : center;">        
+        <div
+          style="
+            width: 25%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          "
+        >
           <button class="custom-button">
-            <span class = "glyphicon glyphicon-thumbs-up" ><i class="bi bi-share"  style = "font-size: 30px"></i></span>
+            <span class="glyphicon glyphicon-thumbs-up"
+              ><i class="bi bi-share" style="font-size: 30px"></i
+            ></span>
           </button>
         </div>
 
-        <div style = "width:25%; display: flex; justify-content: center; align-items : center;">        
+        <div
+          style="
+            width: 25%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          "
+        >
           <button class="custom-button">
-            <span class = "glyphicon glyphicon-thumbs-up" > <i class="bi bi-robot"  style = "font-size: 30px"></i></span>
+            <span class="glyphicon glyphicon-thumbs-up">
+              <i class="bi bi-robot" style="font-size: 30px"></i
+            ></span>
           </button>
         </div>
       </div>
 
-      <hr>
-
-
+      <hr />
 
       {% for comment in post.comments.all %}
       <div class="d-flex flex-row p-3">
@@ -130,11 +196,20 @@
             class="rounded-circle mr-3"
           />
         </div>
-        <div style="width: 1000px;background-color:white; padding-left:20px;padding-right:20px;border-radius:5px; border: 2px solid #adb5bd">
+        <div
+          style="
+            width: 1000px;
+            background-color: white;
+            padding-left: 20px;
+            padding-right: 20px;
+            border-radius: 5px;
+            border: 2px solid #adb5bd;
+          "
+        >
           <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex flex-row align-items-center">
               <span class="mr-2">{{comment.author}}</span>
-              {% comment %} <small class="c-badge">Top Comment</small> {% endcomment %}
+              <small class="c-badge">Top Comment</small> 
             </div>
             <small>{{comment.date}}</small>
           </div>
@@ -149,12 +224,28 @@
           >
             {{comment.body}}
           </p>
-          
-          <div class="d-flex flex-row user-feed" style="margin-top:4px;align-items:center;">
-            <div class="wish" style="width:5%"><i class="fa fa-heartbeat mr-2" style="width:60%; font-size:20px"></i>14</div>
-            <div style="margin-left:100px; width:80%">
-              <a type="button" data-bs-toggle="collapse" data-bs-target="#replyBox{{ comment.id }}" aria-expanded="false" aria-controls="replyBox{{ comment.id }}" style="border-radius:5px">
-                <i class="bi bi-reply-fill" style="font-size:25px"></i>Reply
+
+          <div
+            class="d-flex flex-row user-feed"
+            style="margin-top: 4px; align-items: center"
+          >
+            <div class="wish" style="width: 5%">
+              <i
+                class="fa fa-heartbeat mr-2"
+                style="width: 60%; font-size: 20px"
+              ></i
+              >14
+            </div>
+            <div style="margin-left: 100px; width: 80%">
+              <a
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#replyBox{{ comment.id }}"
+                aria-expanded="false"
+                aria-controls="replyBox{{ comment.id }}"
+                style="border-radius: 5px"
+              >
+                <i class="bi bi-reply-fill" style="font-size: 25px"></i>Reply
               </a>
               <div class="collapse" id="replyBox{{ comment.id }}">
                 <div class="card card-body my-2">
@@ -170,7 +261,9 @@
                       />
                     </div>
                     <div style="width: 600px">
-                      <div class="d-flex justify-content-between align-items-center">
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
                         <div class="d-flex flex-row align-items-center">
                           <span class="mr-2">{{reply.author}}</span>
                           <small class="c-badge">Top Comment</small>
@@ -193,10 +286,14 @@
                   {% endfor %}
 
                   <!--Reply form-->
-                  <form id="reply-form" action="{% url 'add_reply' %}" method="POST"> 
+                  <form id="reply-form" action="{% url 'add_reply' %}" method="POST">
                     {% csrf_token %}
-                    <input type="hidden" name="comment_idd" value="{{ comment.id }}" />
-                    
+                    <input
+                      type="hidden"
+                      name="comment_idd"
+                      value="{{ comment.id }}"
+                    />
+
                     <div class="card" style="padding: 16px">
                       <div class="row">
                         <div class="image-container col-2">
@@ -224,7 +321,6 @@
                               <div class="row">
                                 <div class="col-6">
                                   <div class="pull-left">
-            
                                     <button
                                       type="button"
                                       id="cancel-button"
@@ -233,12 +329,9 @@
                                     >
                                       Cancel
                                     </button>
-            
                                   </div>
                                 </div>
                                 <div class="col-6">
-            
-            
                                   <div class="pull-left rtl-container">
                                     <button
                                       type="submit"
@@ -246,11 +339,9 @@
                                       class="btn btn-success btn-sm"
                                       style="border-radius: 5px"
                                     >
-                                      Comment
+                                      Reply
                                     </button>
                                   </div>
-            
-            
                                 </div>
                               </div>
                             </div>
@@ -261,24 +352,20 @@
                       </div>
                     </div>
                   </form>
-
                 </div>
-                <br>
+                <br />
               </div>
             </div>
           </div>
         </div>
       </div>
-      {% endfor %} 
-      {% if user.username %}
+      {% endfor %} {% if user.username %}
 
-
-
-
-      <form id="comment-form" action="{% url 'add_comment' %}" method="POST"> <!--$("#comment-form").submit(function (event)-->
+      <form id="comment-form" action="{% url 'add_comment' %}" method="POST">
+        <!--$("#comment-form").submit(function (event)-->
         {% csrf_token %}
         <input type="hidden" name="post_idd" value="{{ post.id }}" />
-        
+
         <div class="card" style="padding: 16px">
           <div class="row">
             <div class="image-container col-2">
@@ -306,7 +393,6 @@
                   <div class="row">
                     <div class="col-6">
                       <div class="pull-left">
-
                         <button
                           type="button"
                           id="cancel-button"
@@ -315,12 +401,9 @@
                         >
                           Cancel
                         </button>
-
                       </div>
                     </div>
                     <div class="col-6">
-
-
                       <div class="pull-left rtl-container">
                         <button
                           type="submit"
@@ -331,8 +414,6 @@
                           Comment
                         </button>
                       </div>
-
-
                     </div>
                   </div>
                 </div>
@@ -342,11 +423,7 @@
             </div>
           </div>
         </div>
-      </form> 
-
-
-
-
+      </form>
 
       {% endif %}
     </div>
@@ -356,7 +433,7 @@
         <source src="{{ post.video.url }}" type="video/mp4" />
       </video>
       <h6>on {{post.date}}</h6>
-      {{post.body|safe|linebreaks}} 
+      {{post.body|safe|linebreaks}}
       <!-- prettier-ignore -->
       {% for comment in post.comments.all %}
       <div class="d-flex flex-row p-3">
@@ -387,21 +464,21 @@
           </p>
           <div class="d-flex flex-row user-feed">
             <span class="wish"><i class="fa fa-heartbeat mr-2"></i>14</span>
-            <span class="ml-3"><i class="fa fa-comments-o mr-2">
-              <!--class Reply(models.Model):
+            <span class="ml-3"
+              ><i class="fa fa-comments-o mr-2">
+                <!--class Reply(models.Model):
                   parent_comment= models.ForeignKey(Comment, null=True, blank=True, on_delete=models.CASCADE, related_name='replies')-->
-              {% for reply in comment.replies.all %}
-              <div class="reply">
-                <p>{{ reply.author }}: {{ reply.content }}</p>
-              </div>
-              {% endfor %}
-            </i></span>
+                {% for reply in comment.replies.all %}
+                <div class="reply">
+                  <p>{{ reply.author }}: {{ reply.content }}</p>
+                </div>
+                {% endfor %}
+              </i></span
+            >
           </div>
         </div>
       </div>
-      {% endfor %} 
-      
-      {% if user.username %}
+      {% endfor %} {% if user.username %}
       <!--def add_comment(request):
               if request.method == "POST":-->
       <form id="comment-form" action="{% url 'add_comment' %}" method="POST">

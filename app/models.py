@@ -90,7 +90,7 @@ class Order(models.Model):
     transaction_id = models.CharField(max_length=200,null=True)
 
     def __str__(self):
-        return str(self.id)
+        return str(self.customer)
     @property
     # đếm số lượng sản phẩm mua 
     def get_cart_items(self):
@@ -104,10 +104,13 @@ class Order(models.Model):
         return total
 
 class OrderItem(models.Model):
-    product = models.ForeignKey(Product,on_delete=models.SET_NULL,blank=True,null=True)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,blank=True,null=True)
     order = models.ForeignKey(Order,on_delete=models.SET_NULL,blank=True,null=True)
     quantity = models.IntegerField(default=0,null=True,blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return str(self.product)
+
     @property
     # tính tổng tiền trong item
     def get_total(self):
@@ -118,6 +121,7 @@ class OrderItem(models.Model):
         return total
     
 class ShippingAddress(models.Model):
+    # on_delete=models.CASCADE on_delete=models.CASCADE, điều này có nghĩa là nếu một sản phẩm bị xóa, tất cả các mục trong OrderItem liên kết với sản phẩm đó cũng sẽ tự động bị xóa.
     customer = models.ForeignKey(User, on_delete=models.CASCADE,blank=True,null=True)
     order = models.ForeignKey(Order,on_delete=models.SET_NULL,blank=True,null=True)
     address = models.CharField(max_length=200,null=True)
@@ -166,5 +170,8 @@ class Reply(models.Model):
 
     def __str__(self):
         return f"Response {self.parent_comment.author}"
-    
+
+class Buyed(models.Model) :
+    buyed_product = models.ForeignKey(Product,on_delete=models.CASCADE,blank=True,null=True)
+   
     

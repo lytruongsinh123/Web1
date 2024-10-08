@@ -1,0 +1,13 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% block buyed %}
+{% if buyed_product %}
+    <ul>
+        {% for item in buyed_product %}
+            <li>{{ item.buyed_product}} {{item.buyed_quantity}} </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No products bought yet.</p>
+{% endif %}
+{% endblock %}

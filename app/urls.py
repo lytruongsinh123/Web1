@@ -32,4 +32,5 @@ urlpatterns = [
     path('add_reply/', views.add_reply, name='add_reply'),
     path('test/', views.test, name='test'),
     path('delete-product/<int:product_id>/', delete_product, name='delete_product'),
+    path('buyed/', views.buyed_product, name = 'buyed_product')
 ]

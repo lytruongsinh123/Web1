@@ -6,16 +6,12 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 class ContactInfoAdmin(admin.ModelAdmin):
     form = ContactInfoForm
-
 class Post_Products_Form_Admin(admin.ModelAdmin):
     form = Post_Products_Form
     list_display = ['name', 'seller','image','display_categories','name_seller']
-
     def display_categories(self, obj):
         return ", ".join([category.name for category in obj.category.all()])
-
     display_categories.short_description = 'Categories'  # Đặt tên cho cột
-
     # obj.category.all(): Lấy tất cả các đối tượng Category liên quan đến sản phẩm hiện tại (dùng với ManyToManyField).
     # category.name for category in obj.category.all(): Lặp qua tất cả các danh mục và lấy tên của từng danh mục.
     # ", ".join([...]): Nối các tên danh mục thành một chuỗi, ngăn cách nhau bởi dấu phẩy (,)
@@ -61,15 +57,18 @@ class UserAdmin(BaseUserAdmin):
         if not obj:
             return []
         return super(UserAdmin, self).get_inline_instances(request, obj)
-
-    
+class OrderItemform(admin.ModelAdmin):
+    list_display = ['product', 'quantity','order']
+class Buyedform(admin.ModelAdmin):
+    list_display = ['buyed_product']
 admin.site.unregister(User) 
 admin.site.register(User,UserAdmin)
 admin.site.register(Category)
 admin.site.register(Product, Post_Products_Form_Admin)
 admin.site.register(Order, PostAdmin)
-admin.site.register(OrderItem)
+admin.site.register(OrderItem,OrderItemform)
 admin.site.register(ShippingAddress, ContactInfoAdmin)
 admin.site.register(Post, PostAdmin1)
 admin.site.register(Reply) 
+admin.site.register(Buyed, Buyedform)
 

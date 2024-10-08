@@ -3,47 +3,45 @@
   <head>
     {% load static %}
     <meta charset="utf-8" />
-    
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <!--CSS-->
-
 <link rel="stylesheet" href="{% static 'app/css/style.css' %}" />
 <link rel="stylesheet" href="{% static 'app/css/main.css' %}" />
-<link rel="stylesheet" href="{% static 'app/css/all.min.css' %}" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 <link rel="stylesheet" href="{% static 'app/css/owl.carousel.min.css' %}" />
-
 <!-- External CSS (load after local) -->
-
 <link
   href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
   rel="stylesheet"
   integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
   crossorigin="anonymous"
 />
+
 <link
   href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
   rel="stylesheet"
 />
-
 <!--JS (load after CSS)-->
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
   integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
   crossorigin="anonymous"
 ></script>
+
 <script
   src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
   crossorigin="anonymous"
   defer
 ></script>
+
 <script
   src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
   crossorigin="anonymous"
   defer
 ></script>
 
-    
-    <!-- jQuery AJAX handling script -->
+
+    <!--jQuery AJAX handling script -->
     <!--khắc phục tình trạng cứ bình luận là trang web phải load lại-->
     <script>
       $(document).ready(function () {
@@ -187,16 +185,13 @@
       .custom-link:nth-child(1) {
         filter: hue-rotate(270deg);
       }
-
       .custom-link:nth-child(2) {
         filter: hue-rotate(110deg);
       }
-
       .custom-link span {
         position: absolute;
         display: block;
       }
-
       .custom-link span:nth-child(1) {
         top: 0;
         left: 0;
@@ -205,7 +200,6 @@
         background: linear-gradient(90deg, transparent, #03e9f4);
         animation: animate1 1s linear infinite;
       }
-
       @keyframes animate1 {
         0% {
           left: -100%;
@@ -215,7 +209,6 @@
           left: 100%;
         }
       }
-
       .custom-link span:nth-child(2) {
         top: -100%;
         right: 0;
@@ -225,7 +218,6 @@
         animation: animate2 1s linear infinite;
         animation-delay: 0.25s;
       }
-
       @keyframes animate2 {
         0% {
           top: -100%;
@@ -235,7 +227,6 @@
           top: 100%;
         }
       }
-
       .custom-link span:nth-child(3) {
         bottom: 0;
         right: 0;
@@ -245,7 +236,6 @@
         animation: animate3 1s linear infinite;
         animation-delay: 0.5s;
       }
-
       @keyframes animate3 {
         0% {
           right: -100%;
@@ -255,7 +245,6 @@
           right: 100%;
         }
       }
-
       .custom-link span:nth-child(4) {
         bottom: -100%;
         left: 0;
@@ -265,7 +254,6 @@
         animation: animate4 1s linear infinite;
         animation-delay: 0.75s;
       }
-
       @keyframes animate4 {
         0% {
           bottom: -100%;
@@ -275,7 +263,6 @@
           bottom: 100%;
         }
       }
-
       .custom-link {
         position: relative;
         display: inline-block;
@@ -288,15 +275,13 @@
         overflow: hidden;
         transition: 0.2s;
       }
-
       .custom-link:hover {
         background: #03e9f4;
         color: #fff;
-        border-radius: 5px;
+        border-radius: 25px;
         box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4,
           0 0 200px #03e9f4;
       }
-
       input[type="radio"] {
         display: none;
       }
@@ -414,7 +399,6 @@
         align-items: center;
         justify-content: center;
       }
-
       .content-box {
         position: relative;
         width: 1000px;
@@ -446,7 +430,6 @@
         border-radius: 5px; /* Bo tròn góc */
         /* Đảm bảo chiếm toàn bộ chiều rộng của container */
       }
-
       /* Brush Stroke Vector Shape for image*/
       .brush-mask {
         width: 300px; /* Adjust based on your image size */
@@ -454,7 +437,6 @@
         background: url("brush-stroke.png") center/cover no-repeat;
         position: relative;
       }
-
       .brush-mask img {
         position: absolute;
         top: 0;
@@ -475,7 +457,6 @@
         background-color: rgba(255, 255, 255, 0.15);
         border-radius: 10px;
         box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.37);
-
         -webkit-backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.18);
         color: white;
@@ -487,7 +468,6 @@
         border: 2px solid rgba(255, 255, 255, 0.18);
         color: white;
       }
-
       .file-preview img {
         /* Style the preview image */
         border: 1px solid #ddd;
@@ -498,12 +478,10 @@
         width: 100%;
         /* Other styles to adjust the appearance */
       }
-
       *:after,
       *:before {
         box-sizing: border-box;
       }
-
       :root {
         --x: 0;
         --y: 0;
@@ -522,7 +500,6 @@
           calc((var(--y) * 1px) - (var(--size) * 0.5)) / var(--size) var(--size)
           no-repeat fixed;
       }
-
       .glowy-button {
         border-radius: 1rem;
         text-transform: uppercase;
@@ -539,7 +516,6 @@
         position: relative;
         padding: 1rem 2rem;
       }
-
       .glowy-button::before {
         content: "";
         position: absolute;
@@ -549,7 +525,6 @@
         z-index: 2;
         border-radius: 1rem;
       }
-
       .glowy-button span {
         background: var(--glow), black;
         background-clip: text;
@@ -560,11 +535,9 @@
         position: relative;
         inset: 0;
       }
-
       :root:has(.glowy-button:active) {
         --size: 300px;
       }
-
       .glowy-button::after {
         content: "";
         position: absolute;
@@ -581,12 +554,10 @@
         background-color: #adb5bd;
         cursor: pointer;
       }
-
       /* Thay đổi giao diện khi hover */
       .custom-file-input:hover {
         background-color: #e2e6ea;
       }
-
       /* Tùy chỉnh chữ */
       .custom-file-input::file-selector-button {
         color: white;
@@ -595,12 +566,10 @@
         border: none;
         border-radius: 5px;
       }
-
       /* Tùy chỉnh khi hover nút chọn tệp */
       .custom-file-input::file-selector-button:hover {
         background-color: #0056b3;
       }
-
       .row-image {
         border-radius: 10px; /* Điều chỉnh giá trị để thay đổi độ bo tròn */
       }
@@ -614,9 +583,14 @@
         align-items : center;
       }
       /*Back ground dynamic*/
+      img {
+        image-rendering: auto;        /* Trình duyệt sẽ chọn cách tối ưu nhất */
+        image-rendering: crisp-edges; /* Giúp ảnh hiển thị sắc nét hơn */
+      
+      }
+      
     </style>
   </head>
-
   <body>
     <script>
       const syncPointer = ({ x: pointerX, y: pointerY }) => {
@@ -766,7 +740,7 @@
                 </li>
 
                 <li>
-                  <a class="dropdown-item custom-link" href="#">BUYED PRODUCT</a>
+                  <a class="dropdown-item custom-link" href="{% url 'buyed_product' %}">BUYED PRODUCT</a>
                 </li>
 
                 <li>
@@ -888,6 +862,8 @@
     {% block test %}{% endblock test %}
 
     {% block individual %}{% endblock individual %}
+
+    {% block buyed %}{% endblock %}
 
     <br /><br /><br /><br />
     <!--footer-->

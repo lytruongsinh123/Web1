@@ -1,12 +1,10 @@
 import json
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-
 from .forms import *
 from .forms import CommentForm
 from .models import *
@@ -209,7 +207,6 @@ def UpdateItem(request):
         orderItem.quantity += 1
     elif action == "remove":
         orderItem.quantity -= 1
-
     orderItem.save()
     if orderItem.quantity <= 0:
         orderItem.delete()
@@ -263,6 +260,13 @@ def checkout(request):
     else:
         # Load form với dữ liệu đã lưu (nếu có)
         form = ContactInfoForm(instance=contact_infos)
+    
+    if request.method == "POST":
+        order_items = OrderItem.objects.all()
+        for item in order_items :
+            Buyed.objects.create(buyed_product = item.product)
+            return redirect('home')
+        
 
     context = {
         "items": items,
@@ -289,7 +293,7 @@ def Infor_Individual(request):
             "products": products,
         }
 
-    return render(request, "app\Individual.html", context)
+    return render(request, "app/Individual.html", context)
 
 
 @login_required(
@@ -334,7 +338,7 @@ def PostProducts(request):
         "user_not_login": user_not_login,
         "user_login": user_login,
     }
-    return render(request, "app\postproduct.html", context)
+    return render(request, "app/postproduct.html", context)
 
 
 # def list(request):
@@ -358,7 +362,6 @@ def post(request, id, comment_id=None):
     comment = None
     if comment_id:
         comment = get_object_or_404(Comment, id=comment_id, post=post)
-    form = CommentForm()
 
     liked = False
     # Kiểm tra nếu người dùng đã like bài viết và đăng nhập
@@ -374,11 +377,15 @@ def post(request, id, comment_id=None):
             post.likes.add(user)
             liked = True
 
+    
+    form = CommentForm()
     if request.method == "POST":    
         form = CommentForm(request.POST, author=request.user, post=post)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(request.path) # Không bị lặp lại yêu cầu khi load lại trang web 
+        
+    
 
     context = {"post": post, 
                "form": form, 
@@ -455,7 +462,7 @@ def postblog(request):
         "user_not_login": user_not_login,
         "user_login": user_login,
     }
-    return render(request, "app\postblog.html", context)
+    return render(request, "app/postblog.html", context)
 
 
 def add_comment(request):
@@ -490,9 +497,6 @@ def add_reply(request):
     return JsonResponse({"error": "Invalid request"}, status=400)
 
     
-
-
-
 def blog(request):
     categories = Category.objects.filter(is_sub=False)
     if request.user.is_authenticated:
@@ -536,11 +540,16 @@ def test(request):
 
 # view để xóa sản phẩm
 def delete_product(request, product_id):
-    product = get_object_or_404(
-        Product, id=product_id, name_seller=request.user
-    )  # lấy sản phẩm có product_id =id và name_seller = người đăng nhập hiện tại
+    product = get_object_or_404(Product, id=product_id, name_seller=request.user)  # lấy sản phẩm có product_id =id và name_seller = người đăng nhập hiện tại
     if request.method == "POST":
         product.delete()
         return redirect("home")  # Chuyển hướng đến trang danh sách sản phẩm sau khi xóa
 
     return render(request, "app/confirm_delete.html", {"product": product})
+
+def buyed_product(request):
+    buyed_product = Buyed.objects.all()  # Lấy tất cả các Buyed để hiển thị
+    context = {"buyed_product": buyed_product}
+    return render(request, 'app/buyed.html', context)
+
+   

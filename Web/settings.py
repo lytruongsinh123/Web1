@@ -26,9 +26,9 @@ SECRET_KEY = 'django-insecure-sgf8kjf)4)_stb0ze8lxfyx%&3-esxlqep#f#y&3q@1zbnp@e%
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
+    '192.168.0.101',
     'localhost',
-    '192.168.1.25',
+    '*',
 ]
 
 
@@ -45,9 +45,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'blogs',
-    'widget_tweaks',
+    'rest_framework',
+    'api'
 ]
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -77,8 +77,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Web.wsgi.application'
-
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 

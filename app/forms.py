@@ -8,6 +8,7 @@ class ContactInfoForm(forms.ModelForm):
         model = ShippingAddress
         fields = ['name', 'address', 'phone', 'city']  # Include customer field
 
+
 class Post_Products_Form(forms.ModelForm):
     class Meta:
         model = Product

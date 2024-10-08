@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="SOHq7dQM-WWF4b1ekZTr" name="Page-1">
-        <mxGraphModel dx="927" dy="764" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="1" pageWidth="5000" pageHeight="10000" math="0" shadow="0">
+        <mxGraphModel dx="1604" dy="811" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="1" pageWidth="5000" pageHeight="10000" background="none" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -266,7 +266,7 @@
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="132" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;" parent="1" vertex="1">
-                    <mxGeometry x="1490" y="2100" width="100" height="1080" as="geometry"/>
+                    <mxGeometry x="1380" y="2100" width="100" height="1080" as="geometry"/>
                 </mxCell>
                 <mxCell id="133" value="FIle APP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6a00ff;fontColor=#ffffff;strokeColor=#3700CC;" parent="1" vertex="1">
                     <mxGeometry x="1110" y="2610" width="160" height="60" as="geometry"/>
@@ -319,40 +319,40 @@
                 <mxCell id="154" value="DATABASE" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#e3c800;fontColor=#000000;strokeColor=#B09500;" parent="1" vertex="1">
                     <mxGeometry x="2050" y="4025" width="70" height="90" as="geometry"/>
                 </mxCell>
-                <mxCell id="155" value="SUBMIT DATA IN DATABASE" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" vertex="1" parent="1">
+                <mxCell id="155" value="SUBMIT DATA IN DATABASE" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" parent="1" vertex="1">
                     <mxGeometry x="2200" y="4040" width="140" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="156" value="DATA" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="155">
+                <mxCell id="156" value="DATA" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="155" vertex="1">
                     <mxGeometry y="30" width="140" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="159" value="" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="148" target="155">
+                <mxCell id="159" value="" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="148" target="155" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="2180" y="4180" as="sourcePoint"/>
                         <mxPoint x="2350" y="4150" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="160" value="" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="155" target="154">
+                <mxCell id="160" value="" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="155" target="154" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="2160" y="4110" as="sourcePoint"/>
                         <mxPoint x="2350" y="4150" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="164" value="REDIRECT" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" vertex="1" parent="1">
+                <mxCell id="164" value="REDIRECT" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" parent="1" vertex="1">
                     <mxGeometry x="2420" y="4380" width="140" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="165" value="GET" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="164">
+                <mxCell id="165" value="GET" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="164" vertex="1">
                     <mxGeometry y="30" width="140" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="169" value="" style="endArrow=classic;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="149" target="164">
+                <mxCell id="169" value="" style="endArrow=classic;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="149" target="164" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="2410" y="4130" as="sourcePoint"/>
                         <mxPoint x="2450" y="4220" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="180" value="MÔ HÌNH PRG" style="swimlane;startSize=20;horizontal=1;containerType=tree;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};strokeWidth=3;align=center;fontStyle=0" vertex="1" parent="1">
+                <mxCell id="180" value="MÔ HÌNH PRG" style="swimlane;startSize=20;horizontal=1;containerType=tree;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};strokeWidth=3;align=center;fontStyle=0;" parent="1" vertex="1">
                     <mxGeometry x="2400" y="4010" width="700" height="450" as="geometry"/>
                 </mxCell>
-                <mxCell id="186" value="&lt;div style=&quot;&quot;&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Để tránh vấn đề này, mô hình &lt;/span&gt;&lt;strong style=&quot;background-color: initial;&quot;&gt;Post/Redirect/Get (PRG)&lt;/strong&gt;&lt;span style=&quot;background-color: initial;&quot;&gt; được sử dụng:&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Người dùng gửi dữ liệu qua POST.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Sau khi dữ liệu được xử lý, bạn chuyển hướng (redirect) người dùng đến trang khác (hoặc trang hiện tại) bằng GET.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Nhờ vậy, khi người dùng làm mới trang, chỉ có yêu cầu GET được gửi lại, không phải POST.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;code&gt;HttpResponseRedirect(request.path)&lt;/code&gt; chính là một phần của mô hình này: nó &lt;strong&gt;chuyển hướng&lt;/strong&gt; người dùng tới URL hiện tại sau khi dữ liệu POST đã được xử lý, tránh việc gửi lại yêu cầu POST khi làm mới trang.&lt;br&gt;&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="180">
+                <mxCell id="186" value="&lt;div style=&quot;&quot;&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Để tránh vấn đề này, mô hình &lt;/span&gt;&lt;strong style=&quot;background-color: initial;&quot;&gt;Post/Redirect/Get (PRG)&lt;/strong&gt;&lt;span style=&quot;background-color: initial;&quot;&gt; được sử dụng:&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Người dùng gửi dữ liệu qua POST.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Sau khi dữ liệu được xử lý, bạn chuyển hướng (redirect) người dùng đến trang khác (hoặc trang hiện tại) bằng GET.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Nhờ vậy, khi người dùng làm mới trang, chỉ có yêu cầu GET được gửi lại, không phải POST.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;code&gt;HttpResponseRedirect(request.path)&lt;/code&gt; chính là một phần của mô hình này: nó &lt;strong&gt;chuyển hướng&lt;/strong&gt; người dùng tới URL hiện tại sau khi dữ liệu POST đã được xử lý, tránh việc gửi lại yêu cầu POST khi làm mới trang.&lt;br&gt;&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="180" vertex="1">
                     <mxGeometry x="120" y="100" width="550" height="250" as="geometry"/>
                 </mxCell>
                 <mxCell id="145" value="CLIENT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" parent="180" vertex="1">

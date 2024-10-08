@@ -59,6 +59,7 @@
 								<hr>
 								<button  class="btn btn-success btn-block submit" style="border-radius:5px">Continue</button>
 							{% endif %}
+							
 						</form>
 					</div>
 			    </div>
@@ -75,6 +76,7 @@
 				<hr>
 				<h3>Order Summary</h3>
 				<hr>
+
 				{% for item in items %}
 				<div class="cart-row">
 					<div style="flex:2" ><img class="row-image" src="{{ item.product.ImageURL }}"></div>
@@ -83,8 +85,17 @@
 					<div style="flex:1"><p>{{item.quantity}}</p></div>
 				</div>
 				{% endfor %}
-				<h5>Items:   {{order.get_cart_items}}</h5>
-				<h5>Total:   ${{order.get_cart_total}}</h5>
+				
+				<div class = "cart-row">
+					<div>
+						<h5>Items:   {{order.get_cart_items}}</h5>
+						<h5>Total:   ${{order.get_cart_total}}</h5>
+					</div>
+					<form method ="post">
+						{% csrf_token %}
+						<button type="submit" class="btn btn-outline-secondary add-btn add-btn update-cart" style="margin-left:400px;border-radius:5px">Buy</button>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>
