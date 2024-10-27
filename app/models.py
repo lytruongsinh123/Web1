@@ -172,6 +172,7 @@ class Reply(models.Model):
         return f"Response {self.parent_comment.author}"
 
 class Buyed(models.Model) :
-    buyed_product = models.ForeignKey(Product,on_delete=models.CASCADE,blank=True,null=True)
+    buyed_product = models.ForeignKey(OrderItem,on_delete=models.CASCADE)
+
    
     

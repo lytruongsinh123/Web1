@@ -3,12 +3,13 @@
 {% block buyed %}
 {% if buyed_product %}
     <ul>
+        
         {% for item in buyed_product %}
             <li>{{ item.buyed_product}} {{item.buyed_quantity}} </li>
         {% endfor %}
+        
     </ul>
 {% else %}
-    <p>No products bought yet.</p>
-    <p>Hello</p>
+    
 {% endif %}
 {% endblock %}

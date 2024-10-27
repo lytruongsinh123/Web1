@@ -263,9 +263,13 @@ def checkout(request):
     
     if request.method == "POST":
         order_items = OrderItem.objects.all()
-        for item in order_items :
-            Buyed.objects.create(buyed_product = item.product)
-            return redirect('home')
+        for item in order_items:
+            if item:
+                try:
+                    Buyed.objects.create(buyed_product=item.product)
+                except Exception as e:
+                    print(f"Lỗi khi tạo Buyed: {e}")
+        return redirect('home')
         
 
     context = {
@@ -280,6 +284,7 @@ def checkout(request):
     }
 
     return render(request, "app/checkout.html", context)
+
 
 
 def Infor_Individual(request):
@@ -548,7 +553,7 @@ def delete_product(request, product_id):
     return render(request, "app/confirm_delete.html", {"product": product})
 
 def buyed_product(request):
-    buyed_product = Buyed.objects.all()  # Lấy tất cả các Buyed để hiển thị
+    buyed_product = Buyed.objects.all() # Lấy tất cả các Buyed để hiển thị
     context = {"buyed_product": buyed_product}
     return render(request, 'app/buyed.html', context)
 
